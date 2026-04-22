@@ -112,20 +112,19 @@ public:
     }
 
     string send_status(int y, int m, int d) override {
-        date ask(y, m, d);
-        if (ask < send_date) return "mail not send";
-        if (!(ask < arrive_date)) return "already arrive"; // ask >= arrive_date
-        if (len == 0) return "in station";
-        if (ask < station_time[0]) return "in station";
-        for (int i = 0; i < len; ++i) {
-            // equal to a station time -> in station
-            if (!(station_time[i] < ask) && !(ask < station_time[i])) return "in station";
-            if (i + 1 < len) {
-                if (station_time[i] < ask && ask < station_time[i + 1]) return "in train";
-            } else {
-                if (station_time[i] < ask && ask < arrive_date) return "in train";
+        date q(y, m, d);
+        if (q < send_date) return "mail not send";
+        if (len == 0) {
+            if (q < arrive_date) return "on the way";
+            return "already arrive";
+        }
+        if (q < station_time[0]) return "wait in station";
+        for (int i = 0; i + 1 < len; ++i) {
+            if (q < station_time[i + 1]) {
+                return string("between ") + station_name[i] + " and " + station_name[i + 1];
             }
         }
+        if (q < arrive_date) return string("at ") + station_name[len - 1];
         return "already arrive";
     }
     string type() override { return "train"; }
@@ -195,4 +194,3 @@ public:
 inline void obj_swap(object*& lhs, object*& rhs) {
     object* tmp = lhs; lhs = rhs; rhs = tmp;
 }
-
