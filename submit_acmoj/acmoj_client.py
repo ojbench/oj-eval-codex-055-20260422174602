@@ -121,6 +121,12 @@ def main():
     submit_parser.add_argument("--problem-id", type=int, required=True, help="Problem ID")
     submit_parser.add_argument("--git-url", type=str, required=True, help="Git repository URL")
 
+    # File submission sub-command
+    submit_file_parser = subparsers.add_parser("submit-file", help="Submit code from a local file as C++")
+    submit_file_parser.add_argument("--problem-id", type=int, required=True, help="Problem ID")
+    submit_file_parser.add_argument("--file", type=str, required=True, help="Path to code file (e.g., src.hpp)")
+    submit_file_parser.add_argument("--language", type=str, default="cpp", help="Language (default: cpp)")
+
     # Sub-command for checking submission status
     status_parser = subparsers.add_parser("status", help="Check submission status")
     status_parser.add_argument("--submission-id", type=int, required=True, help="Submission ID")
@@ -161,8 +167,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-    # File submission sub-command
-    submit_file_parser = subparsers.add_parser("submit-file", help="Submit code from a local file as C++")
-    submit_file_parser.add_argument("--problem-id", type=int, required=True, help="Problem ID")
-    submit_file_parser.add_argument("--file", type=str, required=True, help="Path to code file (e.g., src.hpp)")
-    submit_file_parser.add_argument("--language", type=str, default="cpp", help="Language (default: cpp)")
