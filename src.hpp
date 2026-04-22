@@ -193,5 +193,22 @@ public:
 };
 
 inline void obj_swap(object*& lhs, object*& rhs) {
-    object* tmp = lhs; lhs = rhs; rhs = tmp;
+    auto clone = [](object* src)->object*{
+        string t = src->type();
+        object* dst = nullptr;
+        if (t == "no type") dst = new mail();
+        else if (t == "air") dst = new air_mail();
+        else if (t == "train") dst = new train_mail();
+        else if (t == "car") dst = new car_mail();
+        dst->copy(src);
+        return dst;
+    };
+    object* lhs_copy = clone(lhs);
+    object* rhs_copy = clone(rhs);
+    delete lhs;
+    delete rhs;
+    lhs = clone(rhs_copy);
+    rhs = clone(lhs_copy);
+    delete lhs_copy;
+    delete rhs_copy;
 }
